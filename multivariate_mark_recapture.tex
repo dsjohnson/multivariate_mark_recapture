@@ -1,0 +1,250 @@
+\documentclass[fleqn]{article}
+
+%\usepackage[margin=1in]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm,epsfig,rotfloat,psfrag,natbib,url,graphicx,lineno}
+
+\usepackage{tabulary}
+
+ \usepackage{graphicx,type1cm,eso-pic,color}
+ \makeatletter
+           \AddToShipoutPicture{
+             \setlength{\@tempdimb}{.5\paperwidth}
+             \setlength{\@tempdimc}{.5\paperheight}
+             \setlength{\unitlength}{1pt}
+             \put(\strip@pt\@tempdimb,\strip@pt\@tempdimc){
+         \makebox(0,0){\rotatebox{55}{\textcolor[gray]{0.95}
+         {\fontsize{5cm}{5cm}\selectfont{DRAFT}}}}
+             }
+         }
+ \makeatother
+
+\bibliographystyle{apalike}
+
+%% fonts
+%\usepackage{cmbright}
+%\usepackage[T1]{fontenc}
+% \usepackage[utopia]{mathdesign}
+% \usepackage{inconsolata}
+
+
+%%% SOME SHORTCUTS %%%
+\newcommand{\bs}{\ensuremath{\mathbf{s}}}
+\newcommand{\bc}{\ensuremath{\mathbf{c}}}
+\newcommand{\fS}{\ensuremath{\mathcal{S}}}
+\newcommand{\bu}{\ensuremath{\mathbf{u}}}
+\newcommand{\br}{\ensuremath{\mathbf{r}}}
+\newcommand{\bo}{\ensuremath{\mathbf{o}}}
+\newcommand{\fV}{\ensuremath{\mathcal{V}}}
+\newcommand{\bx}{\ensuremath{\mathbf{x}}}
+\newcommand{\bk}{\ensuremath{\mathbf{k}}}
+\newcommand{\bb}{\ensuremath{\boldsymbol{\beta}}}
+\newcommand{\ba}{\ensuremath{\boldsymbol{\alpha}}}
+\newcommand{\bl}{\ensuremath{\boldsymbol{\lambda}}}
+\newcommand{\bn}{\ensuremath{\boldsymbol{\eta}}}
+\newcommand{\bz}{\ensuremath{\boldsymbol{\zeta}}}
+
+\begin{document}
+
+
+%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\baselinestretch}{1.5}\normalsize
+
+\noindent {\LARGE \bf Multivariate state hidden Markov models for mark-recapture data}\bigskip
+
+\renewcommand{\baselinestretch}{1}\normalsize
+
+\noindent {\large Devin S. Johnson$^1$, Jeffery L. Laake, and Rod G. Towell} \bigskip
+
+%\hrulefill
+{
+\itshape{\noindent National Marine Mammal Laboratory, Alaska Fisheries Science Center\\
+NOAA National Marine Fisheries Service,\\
+Seattle, Washington, U.S.A.\medskip \\
+$^1${\em Email:} devin.johnson@noaa.gov
+}
+\bigskip 
+\hrule
+\bigskip
+}
+
+%\clearpage
+
+\raggedbottom
+
+
+%% ABSTRACT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent {\bf Abstract.} %\bigskip
+
+This comes last...
+
+\noindent {\bf Key words}: Some, Descriptive, Words, Go, Here\medskip
+
+%\noindent {\bf Word count:} 2,998
+
+%\clearpage
+
+\renewcommand{\baselinestretch}{1.8}\normalsize
+%\renewcommand{\baselinestretch}{1}\normalsize
+\linenumbers
+
+\section{Introduction}
+
+%When using traditional multi-strata models an individual is categorized according to a variable upon initial capture and subsequently on every recapture the state of the animal is recorded. Thus for a state variable $s\in\{1,2,3\}$, perhaps different locations, the capture history might look like ``01022300'' for a study involving eight capture occasions. In this example, the individual was first captured on occasion 2 in state $s=1$ 
+
+\section{Methods}
+
+To begin the description of multivariate state modeling of mark-recapture data, we must begin with the state and data structure. The general structure is based on the capture histories of individuals, indexed $i=1,\dots,N$, over capture occasions, indexed $j=1,\dots,T$. The state of an individual on a particular occasion is determined by the cross-classification of that individual to a cell in a multiway table where the margins are several state variables of interest. Specifically, the state, $\bs = (s_1,\dots,s_K)$ is a vector where the entries correspond to $K$ different discrete classification criteria, e.g., location, reproductive status, or disease presence. Each state variable has a set of possible values $s_k \in \fS_k=\{1,\dots,m_k\}$, $k=1,\dots,K$. The space of the state vector, $\bs$, is thus $\fS = \fS_1 \times \dots \times \fS_K$. The number of possible states is denoted $M = |\fS|=\prod_k m_k$ When necessary we denote the state of individual $i$ on occasion $j$ by $\bs_{ij}=(s_{ij1},\dots,s_{ijK})$. The observed data for an individual on a particular (re)capture occasion is denoted as $\bc = (c_1,\dots,c_K)$. The observed state can differ from the true state in two ways. First, an individual may not be observed (detected) on a particular capture occasion. Second, it is possible, and highly probable in many situations, that even if an individual is physically observed, state specification may not be completely determined by the researcher. Thus, the space of the observation vector is augmented with two additional levels corresponding to ``not observed'' and ``unknown,'', i.e., $c_k \in \{0,1,\dots,m_k,u\}$, where 0 is for undetected individuals and $u$ is associated with an unknown level for that state variable. Here we take the convention that if $c_k=0$ for any $k$, it is assumed that all $c_k=0$. As with state notation, we use $\bc_{ij}$ to denote the observed state of individual $i$ on occasion $j$ with $\bc_{ij}=(c_{ij1},\dots,c_{ijK})$.
+
+
+\subsection{Two state variable model}
+
+Specifying a model for a general multivariate discrete state is notational cumbersome due to the complex dependence structure. Therefore, we begin with a description for a bivariate state to introduce the reader, then we follow up in the next section with a general model formulation for $>2$ state variables with additional covariates. The general parameter types are the same as in any multistate model: survival ($\phi$), detection ($p$), and state transition ($\psi$) from one occasion to the next. In addition, we have to additional parameters associated with inability to fully assess the state of an individual ($\delta$) and the probability that an individual is in a particular state at first capture ($\pi$). Typically, each of these parameter types depends on the state of the individual, e.g., survival of individual $i=1,\dots,N$ from occasion $j=1,\dots,T$ to occasion $j+1$ is depends on the state the individual is in on occasion $j$. The difference with a multivariate state index is that each state may contribute independently to survival, or, may interact at various levels to further enhance or degrade survival. Thus, models for these parameters must accommodate this interaction,t or dependence when modeling state transition. Thus, we take a log-linear approach \citep{christensen1997log} for modeling multiway contingency tables which allows for all levels of dependence between state variables.     
+
+We begin with modeling state transitions from one occasion to the next. Suppose individual $i$ is alive on occasion $j<T$, then the probability of a transition from state $\br\in\fS$ on occasion $j$ to state $\bs\in\fS$ on occasion $j+1$ is given by the conditional log-linear model, 
+\begin{equation}
+\label{eqn:psi.llm}
+\psi_{ij}(\br,\bs) \propto \exp\left\{\beta_1(s_1,\br) + \beta_2(s_2,\br) + \beta_{1,2}(s_1,s_2,\br)\right\},
+\end{equation}
+where, for each $\br\in\fS$, $\beta_1(s_1,\br)$, $\beta_2(s_2,\br)$, and $\beta_{1,2}(s_1,s_2)$ are parameters which are indexed by the values of $s_1$, $s_2$, and the double index of $(s_1,s_2)$, respectively. For example, the collection of $\beta_1$ parameters is $\{\beta_1(1,\br),\dots,\beta_1(m_1,\br)\}$. If we denote $\boldsymbol{\Psi}_{ij}$ to be the transition matrix describing the probability of transitioning from any state on occasion $j$ to any other state on occasion $j+1$, equation (\ref{eqn:psi.llm}) evaluated for all $\bs\in \fS$ would form the rows associated with each possible current state $\br$. An astute reader will notice that there are $m_1+m_2+m_1m_2$ parameters for each $\br$. Therefore there are $m_1m_2 \times (m_1+m_2+m_1m_2)$ $\beta$ parameters within the $m_1m_2\times m_1m_2$ transition matrix $\boldsymbol{\Psi}_{ij}$. Hence, the model is overparameterized. To alleviate this problem it is customary to fix all $\beta$ parameters to $0$ when $s_1=1$ or $s_2=1$, e.g., $\beta_1(1,\br)\equiv 0$ and $\beta_{1,2}(s_1,1,\br)\equiv 0$ for any $s_1$ value, etc. The $\bs=(1,1)$ cell is termed the reference cell. Of course it is not necessary to use the first level of each state variable, but without loss of generality, we assume that herein. A specification such as this is also necessary for traditional multistate models as well \citep{Laake:2013ab}, because we are still using an mlogit link. See Table \ref{tb:psi.example} for an example of $\psi_{ij}(\br,\bs)$ specification with the reference cell constraint. Here we have  the $\beta$ parameters constant, but they can also vary over individuals and occasions. For the sake of minimizing notational burden of the reader, we will just describe them as if they are constant herein. 
+
+Markovian dependence in time is explicitly included by allowing the $\beta$ parameters to depend on the previous state. In addition, dependence between state variables is accommodated via the $\beta_{1,2}$ interaction parameters. If $\beta_{1,2}(s_1,s_2,\br)=0$ for all values of $s_1$ and $s_2$ then this is a necessary and sufficient condition for $s_1$ and $s_2$ to be independent given the previous state $\br$ \citep{xxx}. Sufficiency is easily observed by the fact that under that assumption
+\begin{equation}
+\begin{split}
+\psi_{ij}(\br,\bs) &\propto \exp\left\{\beta_1(s_1,\br) + \beta_2(s_2,\br)\right\}\\
+ & \propto \psi_{ij}^{(s_1,\br)}\times \psi_{ij}^{(s_2,\br)}.
+ \end{split}
+ \end{equation}
+Thus, the probability of transition to state $\bs$ is the product of independent transitions from $r_1 \to s_1$ and $r_2 \to s_2$. Proof of necessity is quite cumbersome and beyond the scope of this paper. See \citet{xxx} for more theoretical details of log-linear modeling. 
+
+The next set of parameters of scientific interest is survival. Given that individual $i$ is in state $\bs$ on occasion $j$ the probability of survival from occasion $j$ to $j+1$ is described by
+\begin{equation}
+\phi_{ij}(\bs) = \ell^{-1}\{\eta_\emptyset + \eta_1(s_1) + \eta_2(s_2) + \eta_{1,2}(s_1,s_2)\},
+\end{equation}
+where $\ell$ is a link function such as logit or probit, and the $\eta$ parameters are indexed are functions (indexed) by the current state, $\bs$. The $\eta$ parameters have the same structure and reference cell constraints as the $\beta$ parameters  in the $\psi$ model. Readers should also observe that there is a $\eta_\emptyset$ vector. This term is not indexed by the state and represents baseline survival. Even though the notation may appear different for some readers, it should also be noted that this $\phi$ model is identical to a model with $s_1$ and $s_2$ being thought of as known categorical covariates with interaction effects included. So, as far as survival is concerned, $s_1$ and $s_2$ are equivalent to (individual $\times$ occasion) indexed covariates which known. In terms of {\tt R} model notation, this would be \verb#phi ~ s1 + s2 + s1:s2# .
+
+We now move to the observation and detection portion of the model. Given that individual $i$ is in state $\bs$ on occasion $j$, the probability that the individual is detected (i.e., recaptured or resighted) by the researcher is given by
+\begin{equation}
+p_{ij}(\bs) = \ell^{-1}(\zeta_\emptyset + \zeta_1(s_1) + \zeta_2(s_2) + \zeta_{1,2}(s_1,s_2)\},
+\end{equation}
+As with the previous parameters, the $\zeta$ parameters must satisfy the reference cell constraint. As with the survival model, the state variables can be considered as known factor variables for the purposes of conceptualizing the model. There is one more set of parameters working in concert with $p$, these are related to the ability of the researcher to classify a detected individual according to all the state variables. If an individual $i$ is detected on occasion $j$, then the joint probability that the level of each state variable is observed, i.e, $c_k \ne u$ for $k=1,2$, is modeled via,
+\begin{equation}
+\delta_{ij}(\bo,\bs) \propto \exp\left\{\alpha_1(o_1,\bs) + \alpha_2(o_2,\bs) + \alpha_{1,2}(o_1,o_2,\bs)\right\},
+\end{equation}
+where $\bo = (o_1, o_2)$ is a bivariate indicator where $o_k=I(c_k\ne u)$. Here we use $\bo = (0,0)$ as the reference cell to be consistent with previous state uncertainty models \citep{xxx} that use a logit link to model the probability of observing the current univariate state of an individual given it was detected. By using the same log-linear structure as the $\psi$ models, one can incorporate dependence in recording the level of each state variable. That dependence implies, for example, that if the researcher is able to record the level for one state variable, the researcher is more (less) likely to record the level of the other. There may be some state variables which are always recorded with certainty, e.g., location. So, for any $\bo$ that contains a 0 for those state variables, we can also fix the $\delta_{ij}$ to 0 and remove the corresponding $\alpha$ parameters from the overall parameters set. 
+
+Finally, the last set of parameters is associated with the initial capture of the individual. We are considering only CJS type models here, thus, we are still conditioning the model on the occasion when an individual is first observed. When an individual is first captured (marked), however, the researcher may not be able to observe all state variables, i.e., some $c_k = u$. Therefore, we need to model the probability that individual $i$, who is first marked on occasion $j$, is in state $\bs$. So, we describe this probability via,
+\begin{equation}
+\pi_{ij}(\bs) \propto \exp\left\{\lambda_1(s_1) + \lambda_2(s_2) + \lambda_{1,2}(s_1,s_2)\right\}, 
+\end{equation}
+Here, we follow the same reference cell constraint for the $\psi$ models by setting $\lambda_k(s_k)\equiv 0$, $k=1,2$ and $\lambda_{1,2}(s_1,s_2)\equiv 0$ if $s_1=1$ or $s_2=1$. The $\pi$ model parameters do not necessarily have to be estimated. For example, if it is certain that all state variables will be observed at first marking then it can be fixed to $\pi_{ij}(\bs) = 1$, where $\bs$ is the state individual $i$ was in when it was first marked on occasion $j$, and $\pi_{ij}(\br) = 0$ for all $\br\ne\bs$. Or, a researcher might specify, say, $\pi_{ij}(\bs) = 1/M$, where $M$ is the number of cells in $\fS$. The $\pi$ probabilities can be interpreted as a prior distribution, in the Bayesian sense, on the state of a newly marked individual, thus, $1/M$ would be a uniform prior over the state-space.
+ 
+\subsection{General multivariate state model}
+
+In this section we generalize the bivariate state models presented in the previous section. Here, researchers can consider state specifications that index a cell in a general $K$ dimensional hypercube and models can depend on covariates, as well. To accomplish this we introduce the notation $\fV = \{1,\dots,K\}$ to be the set which indexes the collection of $K$ state variables and $v\subseteq\fV$ is a sunset. The partial state $\bs_v$ represents only those elements of $\bs$ whose index is contained in $v\subseteq\fV$. The state subspace $\fS_v$ denotes the set of all possible values of $\bs_v$. Additionally, we denote $\bx_{ij}$ to represent a known, generic, individual by occasion covariate vector. We will use the $\bx$ notation in several models and they need not be the same.
+
+Now, the full specified model describing the transition of individual $i$ in state $\br = (r_1,\dots,r_K)$ on occasion $j$ to state $\bs=(s_1,\dots,s_K)$ on occasion $j+1$ is given by,
+\begin{equation}
+\label{eqn:psi.gen}
+\psi_{ij}(\br,\bs) \propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bb_v(\bs,\br)\right\},
+\end{equation}
+where $\bb_v(\bs,\br)$ is a coefficient vector that depends on the state, $\bs\in\fS$, only through the value of the sub-state $\bs_v\in\fS_v$ and $\br\in\fS$. As with the bivariate model in the previous section, we must satisfy the reference cell constraint to have an identifiable set of parameters. Therefore, all $\bb_v(\bs,\br) \equiv 0$ if any element of the sub-state $\bs_v$ is equal to 1. Independence of state variable is more complex than described in the previous section due to a number of possible interactions between different sets of variables. To provide a generalization, let $v_1$, $v_2$, and $v_3$ be subsets of state variables that partitions $\fV$. Then $\bs_{v_1}$ and $\bs_{v_3}$ are conditionally independent of one another given $\bs_{v_2}$ and $\br$ if and only if $\bb_v(\bs,\br) = 0$ for all $\bs$, where $v$ contains elements of both $v_1$ and $v_3$ \citep{Johnson:2003bh}. Suppose $\fV=\{1,2,3\}$ and there are no covariates, then $s_1$ is conditionally independent of $s_3$ given $s_2$ (and $\br$) if $\beta_{1,3}(\bs,\br) = \beta_{1,2,3}(\bs,\br)=0$ for all states $\bs$. 
+
+We can progress through the other parameter groups in a similar fashion to produce a general multivariate state model. The survival portion of the model can be generalized to 
+\begin{equation}
+\phi_{ij}(\bs) = \ell^{-1}\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bn_v(\bs)\right\},
+\end{equation}
+where, as with the general $psi$ model, the coefficient vectors, $\bn_v$, must satisfy the reference cell constraint. The covariate vector $\bx_{ij}$ need not be the same as that shown in equation (\ref{eqn:psi.gen}), we use the same notation simply to avoid extra clutter. Cycling through the remaining parameters, we have:
+\begin{equation}
+p_{ij}(\bs) = \ell^{-1}\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bz_v(\bs)\right\},
+\end{equation}
+\begin{equation}
+\delta_{ij}(\bo,\bs) \propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\ba_v(\bo,\bs)\right\},
+\end{equation}
+where, $\bo=(o_1,\dots,o_K)$ is the joint indicator $o_k=I(c_k\ne u)$, the reference cell is $\bo=(0,\dots,0)$, and finally, the probability distribution of states upon first capture is
+\begin{equation}
+\pi_{ij}(\bs)\propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bl_v(\bs,\br)\right\}.
+\end{equation}  
+This completes the general model for a $K$ dimensional state vector. In the next section we focus on methods for efficient parameter estimation and inference. 
+ 
+
+\subsection{Statistical inference}
+
+foreword algorithm specification
+
+MLE
+
+Bayes/MCMC?
+
+\section{Example I: Dependent Tag loss}
+
+A nice and tidy example goes here. See how it works out perfectly.
+
+\section{Example II: Steller sea lion natality}
+
+A nice and tidy example goes here. See how it works out perfectly.
+
+\section{Discussion}
+
+Some hand-waving goes here as to why this method is the best thing ever.
+
+
+\section*{Acknowledgments}
+The findings and conclusions in the paper are those of the authors and do not necessarily represent the views of the National Marine Fisheries Service, NOAA. Reference to trade names does not imply endorsement by the National Marine Fisheries Service, NOAA.
+
+\renewcommand{\baselinestretch}{1}\normalsize
+
+\bibliography{multivariate_bib}
+
+\clearpage
+
+
+\renewcommand{\arraystretch}{1.33}
+
+\begin{table}[ht]
+\centering
+\parbox{\textwidth}{\caption{Notation. Here we present a list of notation used throughout the paper. The individual index $i$ runs from 1 to $n$, the total number of marked individuals and $j$ runs from 1 to $T$, the total number of capture/resighting occasions.}}\medskip \\
+\begin{tabulary}{\textwidth}{lL}
+\hline
+$n$ & Number of individuals marked\\
+$T$ & Total number of capture/resight occasions\\
+$\mathcal{V}$ & Set of state variable index, i.e, $\fV = \{1,\dots,K\}$\\
+$K$ & Number of state variables, $K=|\fV|$\\
+$\mathcal{S}$ & Space of possible multivariate state values\\
+$\bs$ & Multivariate state in the $\bs = (s_{1},\dots,s_{K}) \in \mathcal{S}$ \\
+$s_{k}$ & Value of the $k$th state variable, $k = 1,\dots,K$\\
+$m_k$ & The number of different values for the $k$th state variable, i.e., $s_{k} \in \{1,\dots,m_k\}$\\
+$M$ & Total size of $\mathcal{S}$, i.e., $M = |\mathcal{S}| = \prod_{j=1}^K m_j$\\
+$\psi_{ij}(\br,\bs)$ & Probability of individual $i$ transitioning from multivariate state $\br\in\fS$ on occasion $j$ to state $\bs\in\fS$ on occasion $j+1$\\
+$\phi_{ij}(\bs)$ & Probability of individual $i$ surviving from occasion $j$ to occasion $j+1$ given they where in state $\bs$ on occasion $j$\\
+$p_{it}(\bs)$ & Probability individual $i$ is detected on occasion $j$ given they are in state $\bs$\\
+$\bc$ & Observed state vector (capture history), $\bc=(c_{1},\dots,c_{K})$, where $c_{k} \in \{0,1,\dots,m_k,u\}$, 0 represents unobserved,  and $u$ represents unknown\\
+$\bo$ & Binary indicator vector describing which $\bc$ elements are {\em not} equal to $u$, i.e., which elements have been observed\\
+$\delta_{it}(\bo,\bs)$ & Joint conditional probability distribution of $\bo$ given individual $i$ is in state $\bs$ on occasion $j$\\
+$\pi_{ij}(\bs)$ & Probability individual $i$ is in state $\bs$ when it is first captured/marked on occasion $j$\\
+\hline
+\end{tabulary}
+\end{table}
+
+\clearpage
+
+\begin{table}[ht]
+\centering
+\parbox{\textwidth}{\caption{\label{tb:psi.example}  Example transition probabilities, $\psi_{ij}(\br,\bs)$, for a hypothetical bivariate state $\bs$ composed of state variables $s_1\in\{1,2,3\}$ and $s_2\in\{1,2\}$. For simplicity, we restrict this example to the case where there are no additional covariates. The $\psi$ probabilities are presented in their unnormalized for as in equation (\ref{eqn:psi.llm}). The necessary normalizing constant is the sum over all the table entries.}}
+\begin{tabular}{cc|cc|} \cline{3-4}
+                           &  & \multicolumn{2}{c|}{$s_2$}\\ %\cline{3-4}
+                           &  & 1 & 2 \\ \hline
+\multicolumn{1}{|c}{}      & \multicolumn{1}{c|}{1} & 1 & $\exp\{\beta_2(2,\br)\}$ \\
+\multicolumn{1}{|c}{$s_1$} & \multicolumn{1}{c|}{2} & $\exp\{\beta_1(2,\br)\}$ & $\exp\{\beta_1(2,\br)+\beta_2(2,\br)+\beta_{1,2}(2,2,\br)\}$ \\
+\multicolumn{1}{|c}{}      &  \multicolumn{1}{c|}{3} & $\exp\{\beta_1(3,\br)\}$ & $\exp\{\beta_1(3,\br)+\beta_2(2,\br)+\beta_{1,2}(3,2,\br)\}$ \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+\clearpage
+
+Figures.
+
+\end{document}
+
