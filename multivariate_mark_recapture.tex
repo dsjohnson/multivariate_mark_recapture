@@ -91,8 +91,8 @@ This comes last...
 
 %\clearpage
 
-\renewcommand{\baselinestretch}{1.8}\normalsize
-%\renewcommand{\baselinestretch}{1}\normalsize
+%\renewcommand{\baselinestretch}{1.8}\normalsize
+\renewcommand{\baselinestretch}{1.1}\normalsize
 \linenumbers
 
 \section{Introduction}
@@ -101,7 +101,7 @@ This comes last...
 
 \section{Methods}
 
-To begin the description of multivariate state modeling of mark-recapture data, we must begin with the state and data structure. The general structure is based on the capture histories of individuals, indexed $i=1,\dots,I$, over capture occasions, indexed $j=1,\dots,J$. The state of an individual on a particular occasion is determined by the cross-classification of that individual to a cell in a multiway table where the margins are several state variables of interest. Specifically, the state, $\bs = (s_1,\dots,s_K)$ is a vector where the entries correspond to $K$ different discrete classification criteria, e.g., location, reproductive status, or disease presence. Each state variable has a set of possible values $s_k \in \fS_k=\{1,\dots,m_k\}$, $k=1,\dots,K$. The space of the state vector, $\bs$, is thus $\fS = \fS_1 \times \dots \times \fS_K$. The number of possible states is denoted $M = |\fS|=\prod_k m_k$ When necessary we denote the state of individual $i$ on occasion $j$ by $\bs_{ij}=(s_{ij1},\dots,s_{ijK})$. The observed data for an individual on a particular (re)capture occasion is denoted as $\bc = (c_1,\dots,c_K)$. The observed state can differ from the true state in two ways. First, an individual may not be observed (detected) on a particular capture occasion. Second, it is possible, and highly probable in many situations, that even if an individual is physically observed, state specification may not be completely determined by the researcher. Thus, the space of the observation vector is augmented with two additional levels corresponding to ``not observed'' and ``unknown,'', i.e., $c_k \in \{0,1,\dots,m_k,u\}$, where 0 is for undetected individuals and $u$ is associated with an unknown level for that state variable. Here we take the convention that if $c_k=0$ for any $k$, it is assumed that all $c_k=0$. As with state notation, we use $\bc_{ij}$ to denote the observed state of individual $i$ on occasion $j$ with $\bc_{ij}=(c_{ij1},\dots,c_{ijK})$.
+To begin the description of multivariate state modeling of mark-recapture data, we must begin with the state and data structure. The general structure is based on the capture histories of individuals, indexed $i=1,\dots,I$, over capture occasions, indexed $j=1,\dots,J$. The state of an individual on a particular occasion is determined by the cross-classification of that individual to a cell in a multiway table where the margins are several state variables of interest. Specifically, the state, $\bs = (s_1,\dots,s_K)$ is a vector where the entries correspond to $K$ different discrete classification criteria, e.g., location, reproductive status, or disease presence. Each state variable has a set of possible values $s_k \in \fS_k=\{1,\dots,m_k\}$, $k=1,\dots,K$. The space of the state vector, $\bs$, is thus $\fS = \fS_1 \times \dots \times \fS_K$. The number of possible states is denoted $M = |\fS|=\prod_k m_k$ When necessary we denote the state of individual $i$ on occasion $j$ by $\bs_{ij}=(s_{ij1},\dots,s_{ijK})$. The observed data for an individual on a particular (re)capture occasion is denoted as $\bc = (c_1,\dots,c_K)$. The observed state can differ from the true state in two ways. First, an individual may not be observed (detected) on a particular capture occasion. Second, it is possible, and highly probable in many situations, that even if an individual is physically observed, state specification may not be completely determined by the researcher. Thus, the space of the observation vector is augmented with two additional levels corresponding to ``not observed'' and ``unknown,'', i.e., $c_k \in \{0,1,\dots,m_k,m_k+1\}$, where 0 is for undetected individuals and $m_k+1$ is associated with an unknown level for that state variable. Here we take the convention that if $c_k=0$ for any $k$, it is assumed that all $c_k=0$. As with state notation, we use $\bc_{ij}$ to denote the observed state of individual $i$ on occasion $j$ with $\bc_{ij}=(c_{ij1},\dots,c_{ijK})$.
 
 
 \subsection{Two state variable model}
@@ -134,11 +134,19 @@ We now move to the observation and detection portion of the model. Given that in
 \begin{equation}
 p_{ij}(\bs) = \ell^{-1}(\zeta_\emptyset + \zeta_1(s_1) + \zeta_2(s_2) + \zeta_{1,2}(s_1,s_2)\},
 \end{equation}
-As with the previous parameters, the $\zeta$ parameters must satisfy the reference cell constraint. As with the survival model, the state variables can be considered as known factor variables for the purposes of conceptualizing the model. There is one more set of parameters working in concert with $p$, these are related to the ability of the researcher to classify a detected individual according to all the state variables. If an individual $i$ is detected on occasion $j$, then the joint probability that the level of each state variable is observed, i.e, $c_k \ne u$ for $k=1,2$, is modeled via,
+As with the previous parameters, the $\zeta$ parameters must satisfy the reference cell constraint. As with the survival model, the state variables can be considered as known factor variables for the purposes of conceptualizing the model. There is one more set of parameters working in concert with $p$, these are related to the ability of the researcher to classify a detected individual according to all the state variables. If an individual $i$ is detected on occasion $j$, then the joint probability that the level of each state variable is observed, i.e, $c_k \ne m_k+1$ for $k=1,2$, is modeled via,
 \begin{equation}
-\delta_{ij}(\bo,\bs) \propto \exp\left\{\alpha_1(o_1,\bs) + \alpha_2(o_2,\bs) + \alpha_{1,2}(o_1,o_2,\bs)\right\},
+\delta_{ij}(\bc,\bs) \propto \left\{
+\begin{array}{l}
+\begin{split}
+\exp\{\alpha_1(c_1,\bs) + \alpha_2(c_2,\bs) + \alpha_{1,2}&(c_1,c_2,\bs)\} \\
+&\mbox{if both } c_k\in\{s_k,m_k+1\}
+\end{split}\\
+0 \ \mbox{elsewise} 
+\end{array}
+\right. .
 \end{equation}
-where $\bo = (o_1, o_2)$ is a bivariate indicator where $o_k=I(c_k\ne u)$. Here we use $\bo = (0,0)$ as the reference cell to be consistent with previous state uncertainty models \citep{xxx} that use a logit link to model the probability of observing the current univariate state of an individual given it was detected. By using the same log-linear structure as the $\psi$ models, one can incorporate dependence in recording the level of each state variable. That dependence implies, for example, that if the researcher is able to record the level for one state variable, the researcher is more (less) likely to record the level of the other. There may be some state variables which are always recorded with certainty, e.g., location. So, for any $\bo$ that contains a 0 for those state variables, we can also fix the $\delta_{ij}$ to 0 and remove the corresponding $\alpha$ parameters from the overall parameters set. 
+Note that we do not allow for misidentification of states; a state variable is either observed correctly or it is not observed and the value is unknown. Here we use $\bc = (m_1+1,m_2+1)$, the completely unknown state, as the reference cell to be consistent with previous state uncertainty models (e.g., \citealt{Laake:2013ab,kendall2012estimating}) that use a logit link to model the probability of observing the current univariate state of an individual given it was detected. By using the same log-linear structure as the $\psi$ models, one can incorporate dependence in recording the level of each state variable. That dependence implies, for example, that if the researcher is able to record the level for one state variable, the researcher is more (less) likely to record the level of the other. There may be some state variables which are always recorded with certainty, e.g., location. So, for any $\bo$ that contains a 0 for those state variables, we can also fix the $\delta_{ij}$ to 0 and remove the corresponding $\alpha$ parameters from the overall parameters set. 
 
 Finally, the last set of parameters is associated with the initial capture of the individual. We are considering only CJS type models here, thus, we are still conditioning the model on the occasion when an individual is first observed. When an individual is first captured (marked), however, the researcher may not be able to observe all state variables, i.e., some $c_k = u$. Therefore, we need to model the probability that individual $i$, who is first marked on occasion $j$, is in state $\bs$. So, we describe this probability via,
 \begin{equation}
@@ -161,14 +169,14 @@ We can progress through the other parameter groups in a similar fashion to produ
 \begin{equation}
 \phi_{ij}(\bs) = \ell^{-1}\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bn_v(\bs)\right\},
 \end{equation}
-where, as with the general $psi$ model, the coefficient vectors, $\bn_v$, must satisfy the reference cell constraint. The covariate vector $\bx_{ij}$ need not be the same as that shown in equation (\ref{eqn:psi.gen}), we use the same notation simply to avoid extra clutter. Cycling through the remaining parameters, we have:
+where, as with the general $\psi$ model, the coefficient vectors, $\bn_v$, must satisfy the reference cell constraint. The covariate vector $\bx_{ij}$ need not be the same as that shown in equation (\ref{eqn:psi.gen}), we use the same notation simply to avoid extra clutter. Cycling through the remaining parameters, we have:
 \begin{equation}
 p_{ij}(\bs) = \ell^{-1}\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bz_v(\bs)\right\},
 \end{equation}
 \begin{equation}
-\delta_{ij}(\bo,\bs) \propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\ba_v(\bo,\bs)\right\},
+\delta_{ij}(\bc,\bs) \propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\ba_v(\bc,\bs)\right\}, \mbox{ for all } c_k\in\{s_k,m_k+1\},
 \end{equation}
-where, $\bo=(o_1,\dots,o_K)$ is the joint indicator $o_k=I(c_k\ne u)$, the reference cell is $\bo=(0,\dots,0)$, and finally, the probability distribution of states upon first capture is
+where, the reference cell is $\bc=(m_1+1,\dots,m_K+1)$, and finally, the probability distribution of states upon first capture is
 \begin{equation}
 \pi_{ij}(\bs)\propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bl_v(\bs,\br)\right\}.
 \end{equation}  
@@ -188,14 +196,14 @@ To begin the description of the forward algorithm in the multivariate state MR m
 	1-\phi_{ij}(\br_M) & \phi_{ij}(\br_M)\psi_{ij}(\br_M,\bs_1) & \cdots & \phi_{ij}(\br_1)\psi_{ij}(\br_M,\bs_M) \\	                              
 	\end{array}\right],
 	\end{equation}
-where $M$ is the size of the state-space, $\br_m$, $m=1,\dots,M$, refers to the current state on occasion $j$, $\bs_m$ refers to the state transitioning to on occasion $j+1$, and the first column (row) is associated with transition to (from) the death state. In addition to the state-space augmentation, we define the observation probability matrix which describes the probability of observing state $\bc_n$, $n=0,\dots,N$, for animal $i$ on occasion $j$ (rows) given it was actually in state $\bs$ (columns),
+where $M$ is the size of the state-space, $\br_m$, $m=1,\dots,M$, refers to the current state on occasion $j$, $\bs_m$ refers to the state transitioning to on occasion $j+1$, and the first column (row) is associated with transition to (from) the death state. In addition to the state-space augmentation, we define the observation probability matrix which describes the probability of observing state $\bc_n$, $n=0,\dots,N$, for animal $i$ on occasion $j$ (rows) given it was actually in state $\bs\in\tilde\fS$ (columns),
 \begin{equation}
 \bD_{ij} = \left[
-\begin{array}{ccc}
-1 - p_{ij}(\bs_1) & \cdots & 1 - p_{ij}(\bs_1) \\
-p_{ij}(\bs_1)\delta_{ij}(\bc_1,\bs_1) & \cdots & p_{ij}(\bs_M)\delta_{ij}(\bc_1,\bs_M)\\
-\vdots & & \vdots \\
-p_{ij}(\bs_1)\delta_{ij}(\bc_N,\bs_1) & \cdots & p_{ij}(\bs_M)\delta_{ij}(\bc_N,\bs_M)\\
+\begin{array}{cccc}
+1 & 1 - p_{ij}(\bs_1) & \cdots & 1 - p_{ij}(\bs_1) \\
+0 & p_{ij}(\bs_1)\delta_{ij}(\bc_1,\bs_1) & \cdots & p_{ij}(\bs_M)\delta_{ij}(\bc_1,\bs_M)\\
+\vdots & \vdots & & \vdots \\
+0 & p_{ij}(\bs_1)\delta_{ij}(\bc_N,\bs_1) & \cdots & p_{ij}(\bs_M)\delta_{ij}(\bc_N,\bs_M)\\
 \end{array}
 \right].
 \end{equation}
@@ -223,9 +231,9 @@ The forward probabilities, $\boldsymbol{\mu}_{ij}$ represent the conditional pro
 \begin{equation}
 L = \sum_{i=1}^I L_i.
 \end{equation}
-Thus, the log-likehood can be maximized to provide parameter estimation and biological inference. 
+Thus, the log-likehood can be maximized to provide parameter estimation and biological inference. In the next two section we will provide real-world examples where multivariate states are collected in mark-resight studies of two different sea lion species.  
 
-\section{Example I: Dependent Tag loss}
+\section{Example I: Tag loss in California sea lions}
 
 A nice and tidy example goes here. See how it works out perfectly.
 
