@@ -54,7 +54,7 @@
 
 
 %% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\renewcommand{\baselinestretch}{1.5}\normalsize
+\renewcommand{\baselinestretch}{1.8}\normalsize
 
 \noindent {\LARGE \bf Multivariate state hidden Markov models for mark-recapture data}\bigskip
 
@@ -174,7 +174,7 @@ p_{ij}(\bs) = \ell^{-1}\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bz_v(\bs)\right\}, 
 \begin{equation}
 \delta_{ij}(\bc,\bs) \propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\ba_v(\bc,\bs)\right\}, \bc \ne \bzero \mbox{ and } \bs \ne \bzero,
 \end{equation}
-where, the reference cell is $\bc=(m_1+1,\dots,m_K+1)$, and finally, the probability distribution of states upon first capture is
+where, the reference cell is $\bc=(m_1+1,\dots,m_K+1)$. In general, there will be $2^d$ possible values of $\bc$ associated with each $\bs$, where $d$ is the number of state variables for which a $u$ can be recorded. Finally, the probability distribution of states upon first capture is
 \begin{equation}
 \pi_{ij}(\bs)\propto \exp\left\{ \sum_{v\subseteq\fV}\bx_{ij}'\bl_v(\bs)\right\}.
 \end{equation}  
