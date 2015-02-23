@@ -1,39 +1,34 @@
-% Template for the submission to:
-%   The Annals of Probability           [aop]
-%   The Annals of Applied Probability   [aap]
-%   The Annals of Statistics            [aos] 
-%   The Annals of Applied Statistics    [aoas]
-%   Stochastic Systems                  [ssy]
-%
-%Author: In this template, the places where you need to add information
-%        (or delete line) are indicated by {???}.  Mostly the information
-%        required is obvious, but some explanations are given in lines starting
-%Author:
-%All other lines should be ignored.  After editing, there should be
-%no instances of ??? after this line.
+\documentclass[fleqn]{article}
 
-% use option [preprint] to remove info line at bottom
-% journal options: aop,aap,aos,aoas,ssy
-% natbib option: authoryear
-\documentclass[aoas, preprint]{imsart}
-\RequirePackage[OT1]{fontenc}
-\RequirePackage{amsthm,amsmath}
-\RequirePackage{natbib}
-\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+%\usepackage[margin=1in]{geometry}
+
+\usepackage{amsmath,amssymb,amsthm,epsfig,rotfloat,psfrag,natbib,url,graphicx,lineno}
 
 \usepackage{tabulary,multirow}
 
+ \usepackage{graphicx,type1cm,eso-pic,color}
+ \makeatletter
+           \AddToShipoutPicture{
+             \setlength{\@tempdimb}{.5\paperwidth}
+             \setlength{\@tempdimc}{.5\paperheight}
+             \setlength{\unitlength}{1pt}
+             \put(\strip@pt\@tempdimb,\strip@pt\@tempdimc){
+         \makebox(0,0){\rotatebox{55}{\textcolor[gray]{0.95}
+         {\fontsize{5cm}{5cm}\selectfont{DRAFT}}}}
+             }
+         }
+ \makeatother
 
-\bibliographystyle{imsart-nameyear}
+\bibliographystyle{apalike}
 
-% provide arXiv number if available:
-\arxiv{arXiv:0000.0000}
+%% fonts
+%\usepackage{cmbright}
+%\usepackage[T1]{fontenc}
+% \usepackage[utopia]{mathdesign}
+% \usepackage{inconsolata}
 
-% put your definitions there:
-\startlocaldefs
 
-\numberwithin{equation}{section}
-
+%%% SOME SHORTCUTS %%%
 \newcommand{\bs}{\ensuremath{\mathbf{s}}}
 \newcommand{\bc}{\ensuremath{\mathbf{c}}}
 \newcommand{\fS}{\ensuremath{\mathcal{S}}}
@@ -55,61 +50,54 @@
 \newcommand{\bP}{\ensuremath{\mathbf{P}}}
 \newcommand{\fC}{\ensuremath{\mathcal{C}}}
 
-
-\endlocaldefs
-
 \begin{document}
 
-\begin{frontmatter}
 
-% "Title of the paper"
-\title{Multivariate state hidden Markov models for mark-recapture data}
-\runtitle{Multivariate state capture-recapture models}
+%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\baselinestretch}{1.8}\normalsize
 
-% indicate corresponding author with \corref{}
-% \author{\fnms{John} \snm{Smith}\corref{}\ead[label=e1]{smith@foo.com}\thanksref{t1}}
-% \thankstext{t1}{Thanks to somebody} 
-% \address{line 1\\ line 2\\ printead{e1}}
-% \affiliation{Some University}
+\noindent {\LARGE \bf Multivariate state hidden Markov models for mark-recapture data}\bigskip
 
-\author{\fnms{Devin} \snm{Johnson}\corref{}\ead[label=e1]{devin.johnson@noaa.gov}},
-\author{\fnms{Jeff} \snm{Laake}\ead[label=e2]{jeff.laake@noaa.gov}},
-\and
-\author{\fnms{Rod} \snm{Towell}\ead[label=e3]{rod.towell@noaa.gov}}
-\affiliation{NOAA National Marine Mammal Laboratory}
+\renewcommand{\baselinestretch}{1}\normalsize
 
-\address{
-National Marine Mammal Laboratory \\ 
-Alaska Fisheries Science Center \\ 
-NOAA National Marine Fisheries Service \\ 
-Seattle, WA U.S.A. \\
-\printead{e1} \\
-\phantom{E-mail:\ }\printead*{e2} \\
-\phantom{E-mail:\ }\printead*{e3}
+\noindent {\large Devin S. Johnson$^1$, Jeffrey L. Laake, and Rod G. Towell}
+\bigskip
+
+%\hrulefill
+{
+\itshape{\noindent National Marine Mammal Laboratory, Alaska Fisheries Science Center\\
+NOAA National Marine Fisheries Service,\\
+Seattle, Washington, U.S.A.\medskip \\
+$^1${\em Email:} devin.johnson@noaa.gov
 }
-\runauthor{D. Johnson et al.}
+\bigskip 
+\hrule
+\bigskip
+}
 
-\begin{abstract}
+%\clearpage
+
+\raggedbottom
+
+
+%% ABSTRACT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent {\bf Abstract.} %\bigskip
+
 This comes last...
 
-\end{abstract}
+\noindent {\bf Key words}: Some, Descriptive, Words, Go, Here\medskip
 
-%\begin{keyword}[class=MSC]
-%\kwd[Primary ]{}
-%\kwd{}
-%\kwd[; secondary ]{}
-%\end{keyword}
+%\noindent {\bf Word count:} 2,998
 
-\begin{keyword}
-\kwd{Some}
-\kwd{Descriptive words}
-\kwd{Go}
-\kwd{Here}
-\end{keyword}
+%\clearpage
 
-\end{frontmatter}
+%\renewcommand{\baselinestretch}{1.8}\normalsize
+\renewcommand{\baselinestretch}{1.1}\normalsize
+\linenumbers
 
-\section{Introduction} Here we have some literature and fluff.
+\section{Introduction}
+
+%When using traditional multi-strata models an individual is categorized according to a variable upon initial capture and subsequently on every recapture the state of the animal is recorded. Thus for a state variable $s\in\{1,2,3\}$, perhaps different locations, the capture history might look like ``01022300'' for a study involving eight capture occasions. In this example, the individual was first captured on occasion 2 in state $s=1$ 
 
 \section{Methods}
 
@@ -259,21 +247,14 @@ Some hand-waving goes here as to why this method is the best thing ever.
 \section*{Acknowledgments}
 The findings and conclusions in the paper are those of the authors and do not necessarily represent the views of the National Marine Fisheries Service, NOAA. Reference to trade names does not imply endorsement by the National Marine Fisheries Service, NOAA.
 
-% AOS,AOAS: If there are supplements please fill:
-\begin{supplement}[id=suppA]
-  \sname{Supplement A}
-  \stitle{Title}
-  \slink[doi]{10.1214/00-AOASXXXXSUPP}
-  %\sdatatype{.pdf}
-  \sdescription{Additional tables and figures}
-\end{supplement}
-
-
-%\renewcommand{\baselinestretch}{1}\normalsize
+\renewcommand{\baselinestretch}{1}\normalsize
 
 \bibliography{multivariate_bib}
 
 \clearpage
+
+
+\renewcommand{\arraystretch}{1.33}
 
 \begin{table}[ht]
 \centering
@@ -343,7 +324,7 @@ $\pi_{ij}(\bs)$ & Probability individual $i$ is in state $\bs$ when it is first 
 
 \begin{table}[ht]
 \centering
-\parbox{\textwidth}{\caption{\label{tb:tagloss.delta}  Conditional probabilities, $\delta_{ij}$ for the observations, $\bc_{ij}$ given the true state, $\bs_{ij}$, of an animal in the tag loss model example in Section 3. The state of the $k$th flipper tag, $s_k$, $k=1,2$ is represented by $s_k \in \{1,2\}$, where a 1 is recorded if the tag is present. Here we also use the $u$ notation to represent the augmented $m_k+1$ unknown state. The $\delta$ probabilities are presented in their unnormalized form as in equation. The necessary normalizing constants are the sums over columns. The function $I_{\mathcal{P}}(i)$ is an indicator that animal $i$ is a member of the group, $\mathcal{P}$, possessing permanent marks. Note, although we have not expressly indicated here, the $\alpha$ parameters may vary over columns and also depend on external covariates.}}
+\parbox{\textwidth}{\caption{\label{tb:tagloss.delta}  Conditional probabilities, $\delta_{ij}$ for the observations, $\bc_{ij}$ given the true state, $\bs_{ij}$, of an animal in the tag loss model example in Section 3. The state of the $k$th flipper tag, $s_k$, $k=1,2$ is represented by $s_k \in \{1,2\}$, where a 1 is recorded if the tag is present. Here we also use the $u$ notation to represent the augmented $m_k+1$ unknown state. The $\delta$ probabilities are presented in their unnormalized form as in equation. The necessary normalizing constants are the sums over columns. The function $I_{\mathcal{P}}(i)$ is an indicator that animal $i$ is a member of the group, $\mathcal{P}$, possessing permanent marks. Note, although we have not expressly indicated here, the $\alpha$ parameters may vary over columns and also depend on external covariates.}}\medskip
 
 \begin{tabular}{cc|cccc|} \cline{3-6}
                                      &                            & \multicolumn{4}{c|}{$\bs_{ij} = (s_1,s_2)$}\\ %\cline{3-4}
@@ -372,9 +353,5 @@ $^2$ The cell entry is the same for all states, so, the one centered entry appli
 
 Figures.
 
-\clearpage
-
-
-
-
 \end{document}
+
