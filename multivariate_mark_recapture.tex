@@ -1,24 +1,7 @@
-% Template for the submission to:
-%   The Annals of Probability           [aop]
-%   The Annals of Applied Probability   [aap]
-%   The Annals of Statistics            [aos] 
-%   The Annals of Applied Statistics    [aoas]
-%   Stochastic Systems                  [ssy]
-%
-%Author: In this template, the places where you need to add information
-%        (or delete line) are indicated by {???}.  Mostly the information
-%        required is obvious, but some explanations are given in lines starting
-%Author:
-%All other lines should be ignored.  After editing, there should be
-%no instances of ??? after this line.
+\documentclass[sts]{imsart}
 
-% use option [preprint] to remove info line at bottom
-% journal options: aop,aap,aos,aoas,ssy
-% natbib option: authoryear
-\documentclass[aoas, preprint]{imsart}
 \RequirePackage[OT1]{fontenc}
-\RequirePackage{amsthm,amsmath}
-\RequirePackage{natbib}
+\usepackage{amsthm,amsmath,natbib}
 \RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
 
 \usepackage{tabulary,multirow}
@@ -26,14 +9,20 @@
 
 \bibliographystyle{imsart-nameyear}
 
-% provide arXiv number if available:
-\arxiv{arXiv:0000.0000}
+% settings
+%\pubyear{2005}
+%\volume{0}
+%\issue{0}
+%\firstpage{1}
+%\lastpage{8}
 
-% put your definitions there:
 \startlocaldefs
-
 \numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\endlocaldefs
 
+%%% SOME SHORTCUTS %%%
 \newcommand{\bs}{\ensuremath{\mathbf{s}}}
 \newcommand{\bc}{\ensuremath{\mathbf{c}}}
 \newcommand{\fS}{\ensuremath{\mathcal{S}}}
@@ -56,15 +45,12 @@
 \newcommand{\fC}{\ensuremath{\mathcal{C}}}
 
 
-\endlocaldefs
-
 \begin{document}
 
 \begin{frontmatter}
-
-% "Title of the paper"
 \title{Multivariate state hidden Markov models for mark-recapture data}
 \runtitle{Multivariate state capture-recapture models}
+\runauthor{Johnson et al.}
 
 % indicate corresponding author with \corref{}
 % \author{\fnms{John} \snm{Smith}\corref{}\ead[label=e1]{smith@foo.com}\thanksref{t1}}
@@ -72,22 +58,23 @@
 % \address{line 1\\ line 2\\ printead{e1}}
 % \affiliation{Some University}
 
-\author{\fnms{Devin} \snm{Johnson}\corref{}\ead[label=e1]{devin.johnson@noaa.gov}},
+\begin{aug}
+\author{\fnms{Devin} \snm{Johnson}\ead[label=e1]{devin.johnson@noaa.gov}},
 \author{\fnms{Jeff} \snm{Laake}\ead[label=e2]{jeff.laake@noaa.gov}},
 \and
 \author{\fnms{Rod} \snm{Towell}\ead[label=e3]{rod.towell@noaa.gov}}
+
+
 \affiliation{NOAA National Marine Mammal Laboratory}
 
 \address{
-National Marine Mammal Laboratory \\ 
-Alaska Fisheries Science Center \\ 
-NOAA National Marine Fisheries Service \\ 
-Seattle, WA U.S.A. \\
-\printead{e1} \\
-\phantom{E-mail:\ }\printead*{e2} \\
-\phantom{E-mail:\ }\printead*{e3}
+National Marine Mammal Laboratory,
+Alaska Fisheries Science Center,
+NOAA National Marine Fisheries Service,
+Seattle, WA U.S.A.
+\printead{e1,e2,e3}
 }
-\runauthor{D. Johnson et al.}
+\end{aug}
 
 \begin{abstract}
 This comes last...
@@ -109,7 +96,12 @@ This comes last...
 
 \end{frontmatter}
 
-\section{Introduction} Here we have some literature and fluff.
+
+
+
+\section{Introduction}
+
+%When using traditional multi-strata models an individual is categorized according to a variable upon initial capture and subsequently on every recapture the state of the animal is recorded. Thus for a state variable $s\in\{1,2,3\}$, perhaps different locations, the capture history might look like ``01022300'' for a study involving eight capture occasions. In this example, the individual was first captured on occasion 2 in state $s=1$ 
 
 \section{Methods}
 
@@ -262,10 +254,10 @@ The findings and conclusions in the paper are those of the authors and do not ne
 % AOS,AOAS: If there are supplements please fill:
 \begin{supplement}[id=suppA]
   \sname{Supplement A}
-  \stitle{Title}
+  \stitle{Additional details}
   \slink[doi]{10.1214/00-AOASXXXXSUPP}
-  %\sdatatype{.pdf}
-  \sdescription{Additional tables and figures}
+  \sdatatype{xxx.pdf}
+  \sdescription{Additional things to put in the appendix}
 \end{supplement}
 
 
@@ -373,7 +365,6 @@ $^2$ The cell entry is the same for all states, so, the one centered entry appli
 Figures.
 
 \clearpage
-
 
 
 
