@@ -92,7 +92,9 @@ This comes last...
 
 
 \section{Introduction}
+The seminal papers by \cite{Cormack1964}, \cite{Jolly1965}, and \cite{Seber1965} initiated 50 years of active development for capture-recapture theory and application.  The Cormack-Jolly-Seber (CJS) model for survival estimation and the Jolly-Seber model for survival and abundance estimation and their extensions are still the most widely used capture-recapture models. They have been implemented in the computer software MARK \citep{White1999}, POPAN \citep{Arnason1999}, SURGE \citep{Lebreton1992}, M-SURGE \citep{Choquet2004}, E-SURGE \citep{choquet2009}, and marked \citep{Laake2013MEE}. Expansion to multistate models with movement between areas was initiated by \cite{darroch1958multiple} and \cite{arnason1973} and further developed by \cite{hilborn1990}, \cite{Hestbeck1991}, \cite{Schwarz1993} and \cite{Brownie1993}.  \cite{Nichols1992} used the multistate model to describe survival with stage (state) transitions based on mass and this has been followed by numerous other examples using the multistate model \citep{Lebreton2002,Nicholsandkendall1995,White2006}. An important advance was made by \cite{Kendall2004b} who considered models with state uncertainty (unknown state) and \cite{Pradel2005} who cast a multistate model with state uncertainty (unknown state) as a hidden Markov model \citep{zucchini2009hidden}. \cite{kendall2012estimating} used a robust design with a multistate hidden Markov model with state uncertainty to improve precision and that model was implemented in MARK.
 
+In this paper, we describe a general modelling framework for multivariate multistate (MVMS) capture-recapture models in which the state is defined by one or more discrete variables and each variable can be either always known or sometimes unknown when the animal is seen. The modelling framework extends the models in MARK by allowing any or all of the state variables to be uncertain rather than just a single uncertain state. We have implemented the model in the marked package \citep{Laake2013MEE} using a hidden Markov model for maximum likelihood estimation of the parameters which are cast in a log-linear framework \citep{Cormack1989,darroch1980note} to easily allow dependence among state variables. We provide an example using 18 years of annual resighting data collected on a single cohort of California sea lion ({\it Zalophus californianus}) pups that were both branded and double tagged on their flippers in 1996 at San Miguel Island off the west coast near Santa Barbara, California \citep{Melin2011}. The animal's state was defined based on the animal's location (San Miguel or Ano Nuevo Islands) which were always known when the animal was seen and the possibly unknown states of the two flipper tags (present or absent) because the sea lion was identified by its brand.
 %When using traditional multi-strata models an individual is categorized according to a variable upon initial capture and subsequently on every recapture the state of the animal is recorded. Thus for a state variable $s\in\{1,2,3\}$, perhaps different locations, the capture history might look like ``01022300'' for a study involving eight capture occasions. In this example, the individual was first captured on occasion 2 in state $s=1$ 
 
 \section{Methods}
@@ -252,7 +254,7 @@ The findings and conclusions in the paper are those of the authors and do not ne
 
 %\renewcommand{\baselinestretch}{1}\normalsize
 
-\bibliography{multivariate_bib}
+\bibliography{bib_library}
 
 \clearpage
 
